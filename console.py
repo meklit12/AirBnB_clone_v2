@@ -150,9 +150,16 @@ class HBNBCommand(cmd.Cmd):
             if args[0] not in self.__classes:
                 raise NameError()
 
-            o = storage.all(eval(args[0]))
-            print([o[k].__str__() for k in o])
-
+            o = storage.all()
+            some_list = []
+            for k, v in o.items():
+                the_id = v.id
+                key = args[0] + '.' + the_id
+                try:
+                    some_list.append(o[key])
+                except KeyError:
+                    continue
+            print(some_list)
         except NameError:
             print("** class doesn't exist **")
 
