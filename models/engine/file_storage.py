@@ -62,6 +62,9 @@ class FileStorage:
                 for key, val in temp.items():
                         self.all()[key] = FileStorage.__classes[val['__class__']
                         ](**val)
+
+                        self.all()[key] \
+                            = FileStorage.__classes[val['__class__']](**val)
         except FileNotFoundError:
             pass
 
