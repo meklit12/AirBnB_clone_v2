@@ -25,16 +25,9 @@ class FileStorage:
         """Returns a dictionary of models currently in storage"""
         if cls is not None:
             some_dict = {}
-           # o = FileStorage.__objects
             for k, v in self.__objects.items():
-                #the_id = v.id
-                #key = __class__.__name__ + '.' + the_id
                 if cls == v.__class__ or cls == v.__class__.__name__:
                     some_dict[k] = v
-                #try:
-                   # some_dict.update(o[key])
-                #except KeyError:
-                    #continue
             return some_dict
         else:
             return self.__objects
@@ -60,9 +53,6 @@ class FileStorage:
             with open(FileStorage.__file_path, 'r') as f:
                 temp = json.load(f)
                 for key, val in temp.items():
-                        self.all()[key] = FileStorage.__classes[val['__class__']
-                        ](**val)
-
                         self.all()[key] \
                             = FileStorage.__classes[val['__class__']](**val)
         except FileNotFoundError:
