@@ -16,6 +16,7 @@ if models.storage_t == "db":
 else:
     Base = object
 
+
 class BaseModel:
     """
     public instance attributes:
@@ -23,8 +24,10 @@ class BaseModel:
     """
     if models.storage_t == "db":
         id = Column(String(60), primary_key=True)
-        created_at = Column(DateTime, nullable=False, default=datetime.utcnow())
-        updated_at = Column(DateTime, nullable=False, default=datetime.utcnow())
+        created_at = Column(DateTime, nullable=False,
+                            default=datetime.utcnow())
+        updated_at = Column(DateTime, nullable=False,
+                            default=datetime.utcnow())
 
     def __init__(self, *args, **kwargs):
         """
@@ -91,4 +94,3 @@ class BaseModel:
         deletes instance from storage
         """
         models.storage.delete()
-
