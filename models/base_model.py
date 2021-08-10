@@ -22,6 +22,7 @@ class BaseModel:
     public instance attributes:
     id, created_at, updated_at
     """
+
     if models.storage_t == "db":
         id = Column(String(60), primary_key=True)
         created_at = Column(DateTime, nullable=False,
@@ -71,7 +72,7 @@ class BaseModel:
         with the current datetime
         Calls save(self) method of storage
         """
-        self.updated_at = datetime.now()
+        self.updated_at = datetime.utcnow()
         models.storage.new(self)
         models.storage.save()
 
@@ -87,8 +88,8 @@ class BaseModel:
                 my_dict[k] = v.isoformat()
             else:
                 my_dict[k] = v
+            my_dict.pop("_sa_instance_state", None)
         return my_dict
-
     def delete(self):
         """
         deletes instance from storage
