@@ -145,23 +145,25 @@ class HBNBCommand(cmd.Cmd):
             o = storage.all()
             print([o[k].__str__() for k in o])
             return
-        try:
+        some_list = []
+        if line:
             args = line.split(" ")
             if args[0] not in self.__classes:
-                raise NameError()
+                print("** class doesn't exist **")
+                return
 
-            o = storage.all()
-            some_list = []
+            o = storage.all(args[0])
             for k, v in o.items():
-                the_id = v.id
+                """the_id = v.id
                 key = args[0] + '.' + the_id
                 try:
                     some_list.append(o[key])
                 except KeyError:
-                    continue
+                    continue"""
+                some_list.append(v)
             print(some_list)
-        except NameError:
-            print("** class doesn't exist **")
+        """except NameError:
+            print("** class doesn't exist **")"""
 
     def do_update(self, line):
         """Updates an instanceby adding or updating attribute
