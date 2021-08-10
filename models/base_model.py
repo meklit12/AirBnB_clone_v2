@@ -5,17 +5,24 @@ has class BaseModel that defines all
 common atributes/methods for other classes
 """
 
-
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy import Column, String, Integer, DateTime
 import models
 import uuid
 from datetime import datetime
 
+
+Base = declarative_base()
 
 class BaseModel:
     """
     public instance attributes:
     id, created_at, updated_at
     """
+
+    id = Column(String(60), primary_key=True)
+    created_at = Column(DateTime, nullable=False, default=datetime.utcnow())
+    updated_at = Column(DateTime, nullable=False, default=datetime.utcnow())
 
     def __init__(self, *args, **kwargs):
         """
@@ -36,7 +43,7 @@ class BaseModel:
             self.id = str(uuid.uuid4())
             self.created_at = datetime.now()
             self.updated_at = datetime.now()
-            models.storage.new(self)
+            """ models.storage.new(self)"""
 
     def __str__(self):
         """
@@ -60,6 +67,7 @@ class BaseModel:
         Calls save(self) method of storage
         """
         self.updated_at = datetime.now()
+        models.storage.new(self)
         models.storage.save()
 
     def to_dict(self):
@@ -75,3 +83,10 @@ class BaseModel:
             else:
                 my_dict[k] = v
         return my_dict
+
+    def delete(self):
+        """
+        deletes instance from storage
+        """
+        models.storage.delete()
+
