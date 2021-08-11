@@ -8,7 +8,6 @@ from models.city import City
 from os import getenv
 from sqlalchemy.orm import relationship
 from models.review import Review
-from sqlalchemy import table
 from models.user import User
 
 if getenv('HBNB_TYPE_STORAGE') == 'db':
@@ -16,11 +15,11 @@ if getenv('HBNB_TYPE_STORAGE') == 'db':
                           Column('place_id', String(60),
                                  ForeignKey('places.id', onupdate='CASCADE',
                                             ondelete='CASCADE'),
-                                 primary_key=True),
+                                 primary_key=True, nullable=False),
                           Column('amenity_id', String(60),
                                  ForeignKey('amenities.id', onupdate='CASCADE',
                                             ondelete='CASCADE'),
-                                 primary_key=True))
+                                 primary_key=True, nullable=False))
 
 
 class Place(BaseModel, Base):
@@ -41,6 +40,8 @@ class Place(BaseModel, Base):
         amenity_ids = []
         reviews = relationship("Review",
                                backref="place", cascade="all, delete")
+        amenities = relationship("Amenity", secondary=place_amenity,
+                                 backref="place_amenity", viewonly=False)
 
     else:
         city_id = ""
@@ -55,9 +56,9 @@ class Place(BaseModel, Base):
         longitude = 0.0
         amenity_ids = []
 
-    def init(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs):
         """initializes Place"""
-        super().init(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
     if getenv('HBNB_TYPE_STORAGE') != 'db':
         @property
