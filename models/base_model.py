@@ -12,7 +12,7 @@ import uuid
 from os import getenv
 from datetime import datetime
 
-time = "%Y-%m-%d%H:%M:%S.%f"
+time = "%Y-%m-%dT%H:%M:%S.%f"
 
 if models.storage_t == "db":
     Base = declarative_base()
@@ -45,7 +45,7 @@ class BaseModel:
             self.created_at = datetime.now()
             for k, v in kwargs.items():
                 if k == "created_at" or k == "updated_at":
-                    v = datetime.strptime(kwargs["updated_at"], time)
+                    v = datetime.strptime(v, time)
                 if k != "__class__":
                     setattr(self, k, v)
         else:
