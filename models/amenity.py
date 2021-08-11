@@ -9,6 +9,13 @@ from sqlalchemy.orm import relationship
 
 
 class Amenity(BaseModel, Base):
-    __tablename__ = "amenities"
-    name = Column(String(128), nullable=False)
-    place_amenities = relationship("Place", )
+    """ represents Amentiy"""
+    if models.storage_t == 'db':
+        __tablename__ = "amenities"
+        name = Column(String(128), nullable=False)
+    else:
+        name = ""
+
+    def __init__(self, *args, **kwargs):
+        """initalize amentie"""
+        super().__init__(*args, **kwargs)
