@@ -11,7 +11,7 @@ from models.review import Review
 from sqlalchemy import table
 from models.user import User
 
-if models.storage_t == 'db':
+if getenv('HBNB_TYPE_STORAGE') == 'db':
     place_amenity = Table('place_amenity', Base.metadata,
                           Column('place_id', String(60),
                                  ForeignKey('places.id', onupdate='CASCADE',
@@ -25,7 +25,7 @@ if models.storage_t == 'db':
 
 class Place(BaseModel, Base):
     """ A place to stay """
-    if models.storage_t == 'db':
+    if getenv('HBNB_TYPE_STORAGE') == 'db':
 
         __tablename__ = "places"
         city_id = Column(String(60), ForeignKey("cities.id"), nullable=False)
@@ -39,7 +39,8 @@ class Place(BaseModel, Base):
         latitude = Column(Float, nullable=True)
         longitude = Column(Float, nullable=True)
         amenity_ids = []
-        reviews = relationship("Review", backref="place", cascade="all, delete")
+        reviews = relationship("Review",
+                               backref="place", cascade="all, delete")
 
     else:
         city_id = ""
@@ -58,7 +59,7 @@ class Place(BaseModel, Base):
         """initializes Place"""
         super().init(*args, **kwargs)
 
-    if models.storage_t != 'db':
+    if getenv('HBNB_TYPE_STORAGE') != 'db':
         @property
         def reviews(self):
             """getter attribute returns the list of Review instances"""

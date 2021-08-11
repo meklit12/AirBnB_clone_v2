@@ -9,7 +9,7 @@ from sqlalchemy import Column, Integer, String, ForeignKey
 
 class Review(BaseModel, Base):
     """ Review classto store review information """
-    if models.storage_t == 'db':
+    if getenv('HBNB_TYPE_STORAGE') == 'db':
         __tablename__ = "reviews"
         place_id = Column(String(60), ForeignKey("places.id"), nullable=False)
         user_id = Column(String(60), ForeignKey("users.id"), nullable=False)

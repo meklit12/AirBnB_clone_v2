@@ -4,17 +4,17 @@ Module base_model
 has class BaseModel that defines all
 common atributes/methods for other classes
 """
+import models
 import sqlalchemy
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, String, Integer, DateTime
-import models
 import uuid
 from os import getenv
 from datetime import datetime
 
 time = "%Y-%m-%dT%H:%M:%S.%f"
 
-if models.storage_t == "db":
+if getenv("HBNB_TYPE_STORAGE") == "db":
     Base = declarative_base()
 else:
     Base = object
@@ -26,7 +26,7 @@ class BaseModel:
     id, created_at, updated_at
     """
 
-    if models.storage_t == "db":
+    if getenv("HBNB_TYPE_STORAGE") == "db":
         id = Column(String(60), primary_key=True)
         created_at = Column(DateTime, nullable=False,
                             default=datetime.utcnow())

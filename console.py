@@ -143,7 +143,7 @@ class HBNBCommand(cmd.Cmd):
         If no class is specified, displays all instantiated objects."""
         if not line:
             o = storage.all()
-            #print("o from storage.all() is {}".format(o))
+            # print("o from storage.all() is {}".format(o))
             print([o[k].__str__() for k in o])
             return
         some_list = []
@@ -154,7 +154,8 @@ class HBNBCommand(cmd.Cmd):
                 return
 
             o = storage.all(args[0])
-            #print("o is {} when args[0] which is {} is passed]".format(o, args[0]))
+            """print("o is {} when args[0] which is {} is passed".
+            format(o, args[0]))"""
             for k, v in o.items():
                 """the_id = v.id
                 key = args[0] + '.' + the_id
