@@ -4,12 +4,15 @@ Module base_model
 has class BaseModel that defines all
 common atributes/methods for other classes
 """
-
+import sqlalchemy
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, String, Integer, DateTime
 import models
 import uuid
+from os import getenv
 from datetime import datetime
+
+time = "%Y-%m-%d%H:%M:%S.%f"
 
 if models.storage_t == "db":
     Base = declarative_base()
@@ -77,21 +80,19 @@ class BaseModel:
         models.storage.save()
 
     def to_dict(self):
-        """
-        returns a dictionary containing all keys/values of
-        __dict__ of the instance
-        """
-        my_dict = {}
-        my_dict["__class__"] = self.__class__.__name__
-        for k, v in self.__dict__.items():
-            if k == "created_at" or k == "updated_at":
-                my_dict[k] = v.isoformat()
-            else:
-                my_dict[k] = v
-            my_dict.pop("_sa_instance_state", None)
-        return my_dict
+        """returns a dictionary containing all keys/values of the instance"""
+        new_dict = self.dict.copy()
+        if "created_at" in new_dict:
+            new_dict["created_at"] = new_dict["created_at"].strftime(time)
+        if "updated_at" in new_dict:
+            new_dict["updated_at"] = new_dict["updated_at"].strftime(time)
+        new_dict["__class__"] = self.__class__.__name__
+        if "_sa_instance_state" in new_dict:
+            del new_dict["_sa_instance_state"]
+        return new_dict
+
     def delete(self):
         """
         deletes instance from storage
         """
-        models.storage.delete()
+        models.storage.delete(self)
